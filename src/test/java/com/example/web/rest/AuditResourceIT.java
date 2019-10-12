@@ -98,7 +98,7 @@ public class AuditResourceIT {
         auditEventRepository.save(auditEvent);
 
         // Get the audit
-        restAuditMockMvc.perform(get("/management/audits/{id}", auditEvent.getId()))
+        restAuditMockMvc.perform(get("/management/audits/{id}", auditEvent.getEventId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.principal").value(SAMPLE_PRINCIPAL));
@@ -148,13 +148,13 @@ public class AuditResourceIT {
     public void testPersistentAuditEventEquals() throws Exception {
         TestUtil.equalsVerifier(PersistentAuditEvent.class);
         PersistentAuditEvent auditEvent1 = new PersistentAuditEvent();
-        auditEvent1.setId(1L);
+        auditEvent1.setEventId(1L);
         PersistentAuditEvent auditEvent2 = new PersistentAuditEvent();
-        auditEvent2.setId(auditEvent1.getId());
+        auditEvent2.setEventId(auditEvent1.getEventId());
         assertThat(auditEvent1).isEqualTo(auditEvent2);
-        auditEvent2.setId(2L);
+        auditEvent2.setEventId(2L);
         assertThat(auditEvent1).isNotEqualTo(auditEvent2);
-        auditEvent1.setId(null);
+        auditEvent1.setEventId(null);
         assertThat(auditEvent1).isNotEqualTo(auditEvent2);
     }
 }

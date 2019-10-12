@@ -4,48 +4,35 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Persist AuditEvent managed by the Spring Boot actuator.
  *
  * @see org.springframework.boot.actuate.audit.AuditEvent
  */
-@Entity
-@Table(name = "jhi_persistent_audit_event")
 public class PersistentAuditEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    @Column(name = "event_id")
-    private Long id;
+    private Long eventId;
 
     @NotNull
-    @Column(nullable = false)
     private String principal;
 
-    @Column(name = "event_date")
     private Instant auditEventDate;
 
-    @Column(name = "event_type")
     private String auditEventType;
 
-    @ElementCollection
-    @MapKeyColumn(name = "name")
-    @Column(name = "value")
-    @CollectionTable(name = "jhi_persistent_audit_evt_data", joinColumns=@JoinColumn(name="event_id"))
-    private Map<String, String> data = new HashMap<>();
+    private List<KeyValue> keyValueList = new ArrayList<>();
 
-    public Long getId() {
-        return id;
+    public Long getEventId() {
+        return eventId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
     }
 
     public String getPrincipal() {
@@ -73,11 +60,38 @@ public class PersistentAuditEvent implements Serializable {
     }
 
     public Map<String, String> getData() {
-        return data;
+        if (keyValueList == null) {
+            return Collections.EMPTY_MAP;
+        }
+
+        return keyValueList.stream().collect(
+            Collectors.toMap(KeyValue::getKey, KeyValue::getValue)
+        );
     }
 
-    public void setData(Map<String, String> data) {
-        this.data = data;
+    public void setKeyValueList(List<KeyValue> data ) {
+        this.keyValueList = data;
+    }
+
+    public void setData(Map<String, String> dataMap ) {
+
+        if (dataMap == null) {
+            return;
+        }
+
+        List<KeyValue> dataList = dataMap.entrySet().stream()
+            .map(
+                d -> {
+                    KeyValue kv = new KeyValue();
+                    kv.setKey(d.getKey());
+                    kv.setValue(d.getValue());
+                    return kv;
+                }
+            )
+            .collect(
+                Collectors.toList()
+            );
+        this.setKeyValueList(dataList);
     }
 
     @Override
@@ -88,7 +102,7 @@ public class PersistentAuditEvent implements Serializable {
         if (!(o instanceof PersistentAuditEvent)) {
             return false;
         }
-        return id != null && id.equals(((PersistentAuditEvent) o).id);
+        return eventId != null && eventId.equals(((PersistentAuditEvent) o).eventId);
     }
 
     @Override
@@ -99,9 +113,12 @@ public class PersistentAuditEvent implements Serializable {
     @Override
     public String toString() {
         return "PersistentAuditEvent{" +
-            "principal='" + principal + '\'' +
+            "eventId=" + eventId +
+            ", principal='" + principal + '\'' +
             ", auditEventDate=" + auditEventDate +
             ", auditEventType='" + auditEventType + '\'' +
+            ", keyValueList=" + keyValueList + '\'' +
+            ", data=" + getData() +
             '}';
     }
 }

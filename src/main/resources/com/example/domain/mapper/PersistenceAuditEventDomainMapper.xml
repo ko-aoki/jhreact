@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.domain.mapper.PersistenceAuditEventDomainMapper">
+    <resultMap id="flatPersistentAuditEvent" type="FlatPersistentAuditEvent">
+        <id property="id" column="event_id"/>
+        <id property="principal" column="principal"/>
+        <id property="auditEventDate" column="event_date"/>
+        <id property="auditEventType" column="event_type"/>
+        <id property="authorityName" column="authority_name"/>
+        <id property="authorityValue" column="authority_value"/>
+    </resultMap>
+    <resultMap id="persistentAuditEvent" type="PersistentAuditEvent">
+        <id property="eventId" column="event_id"/>
+        <id property="principal" column="principal"/>
+        <id property="auditEventDate" column="event_date"/>
+        <id property="auditEventType" column="event_type"/>
+        <collection property="keyValueList" column="event_id" ofType="KeyValue" select="findAuditEventDataById"/>
+    </resultMap>
+    <resultMap id="keyValue" type="KeyValue">
+        <id property="key" column="key"/>
+        <id property="value" column="value"/>
+    </resultMap>
+
+    <select id="findById" resultMap="flatPersistentAuditEvent">
+        select
+            e.event_id event_id,
+            e.principal principal,
+            e.event_date event_date,
+            e.event_type event_type,
+            d.name authority_name,
+            d.value authority_value
+        from jhi_persistent_audit_event e
+        inner join
+            jhi_persistent_audit_evt_data d
+        on
+            e.event_id = d.event_id
+        where
+            e.event_id = #{id}
+    </select>
+    <select id="findAll" resultMap="flatPersistentAuditEvent">
+        select
+            e.event_id event_id,
+            e.principal principal,
+            e.event_date event_date,
+            e.event_type event_type,
+            d.name authority_name,
+            d.value authority_value
+        from jhi_persistent_audit_event e
+        inner join
+            jhi_persistent_audit_evt_data d
+        on
+            e.event_id = d.event_id
+    </select>
+    <select id="countAll" resultType="_int">
+        select
+            count(*)
+        from jhi_persistent_audit_event e
+        inner join
+            jhi_persistent_audit_evt_data d
+        on
+            e.event_id = d.event_id
+    </select>
+    <select id="findByPrincipal" resultMap="flatPersistentAuditEvent">
+        select
+            e.event_id event_id,
+            e.principal principal,
+            e.event_date event_date,
+            e.event_type event_type,
+            d.name authority_name,
+            d.value authority_value
+        from jhi_persistent_audit_event e
+        inner join
+            jhi_persistent_audit_evt_data d
+        on
+            e.event_id = d.event_id
+        where
+            e.principal = #{principal}
+    </select>
+    <insert id="save" parameterType="com.example.domain.PersistentAuditEvent" useGeneratedKeys="true" keyProperty="eventId">
+          insert into
+              jhi_persistent_audit_event
+          (
+            principal,
+            event_date,
+            event_type
+          )
+          values
+          (
+            #{principal},
+            #{auditEventDate},
+            #{auditEventType}
+          )
+    </insert>
+    <delete id="delete" parameterType="PersistentAuditEvent">
+        delete
+        from
+        jhi_persistent_audit_event
+        where
+        name = #{id}
+    </delete>
+    <select id="countAllByAuditEventDateBetween" resultType="_int">
+        select
+            count(*)
+        from jhi_persistent_audit_event e
+        where
+        <![CDATA[
+            e.event_date >= #{from}
+            and
+            e.event_date <= #{to}
+        ]]>
+    </select>
+    <select id="findAllByAuditEventDateBetween" resultMap="persistentAuditEvent">
+        select
+            event_id event_id,
+            principal principal,
+            event_date event_date,
+            event_type event_type
+        from jhi_persistent_audit_event
+        where
+        <![CDATA[
+            event_date >= #{from}
+            and
+            event_date <= #{to}
+        ]]>
+      order by event_id
+      LIMIT
+        #{pageable.pageSize}
+      OFFSET
+        #{pageable.offset}
+    </select>
+    <select id="findAuditEventDataById" resultMap="keyValue">
+        select
+            name key,
+            value value
+        from
+            jhi_persistent_audit_evt_data
+        where
+            event_id = #{eventId}
+    </select>
+</mapper>

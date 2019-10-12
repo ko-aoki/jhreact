@@ -3,7 +3,6 @@ package com.example.security;
 import com.example.JhreactApp;
 import com.example.domain.User;
 import com.example.repository.UserRepository;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

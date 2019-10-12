@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.domain.mapper.AuthorityDomainMapper">
+    <resultMap id="authority" type="Authority">
+        <id property="name" column="name"/>
+    </resultMap>
+    <select id="findById" resultMap="authority">
+        select
+            name
+        from jhi_authority
+        where
+            name = #{name}
+    </select>
+    <select id="findAll" resultMap="authority">
+        select
+            name
+        from jhi_authority
+    </select>
+    <insert id="create" parameterType="authority">
+          insert into
+              jhi_authority
+          (
+            name
+          )
+          values
+          (
+            #{name}
+          )
+    </insert>
+    <delete id="delete" parameterType="authority">
+        delete
+        from
+        jhi_authority
+        where
+        name = #{name}
+    </delete>
+</mapper>

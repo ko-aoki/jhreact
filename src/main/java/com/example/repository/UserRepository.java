@@ -1,44 +1,87 @@
 package com.example.repository;
 
 import com.example.domain.User;
-
+import com.example.domain.mapper.UserDomainMapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Page;
-
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.time.Instant;
 
 /**
- * Spring Data JPA repository for the {@link User} entity.
+ * ユーザマスタのDaoクラス.
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public class UserRepository {
 
-    Optional<User> findOneByActivationKey(String activationKey);
+    UserDomainMapper mapper;
 
+    public UserRepository(UserDomainMapper mapper) {
+        this.mapper = mapper;
+    }
 
-    List<User> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
+    public Optional<User> findById(@Param("id") Long id) {
+        return this.mapper.findById(id);
+    }
 
+    public List<User> findAll() {
+        return this.mapper.findAll();
+    }
 
-    Optional<User> findOneByResetKey(String resetKey);
+    public User save(@Param("user") User user) {
+        this.mapper.save(user);
+        return user;
+    }
 
-    Optional<User> findOneByEmailIgnoreCase(String email);
+    public void delete(@Param("user") User user) {
+        this.mapper.delete(user);
+    }
 
-    Optional<User> findOneByLogin(String login);
+    public Optional<User> findOneByActivationKey(@Param("activationKey") String activationKey) {
+        return this.mapper.findOneByActivationKey(activationKey);
+    }
 
-    @EntityGraph(attributePaths = "authorities")
-    Optional<User> findOneWithAuthoritiesById(Long id);
+    public List<User> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(
+        @Param("createdDate") Instant dateTime) {
+        return this.mapper.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(dateTime);
+    }
 
-    @EntityGraph(attributePaths = "authorities")
-    Optional<User> findOneWithAuthoritiesByLogin(String login);
+    public Optional<User> findOneByResetKey(@Param("resetKey") String resetKey) {
+        return this.mapper.findOneByResetKey(resetKey);
+    }
 
-    @EntityGraph(attributePaths = "authorities")
-    Optional<User> findOneWithAuthoritiesByEmail(String email);
+    public Optional<User> findOneByEmailIgnoreCase(@Param("email") String email) {
+        return this.mapper.findOneByEmailIgnoreCase(email);
+    }
 
-    Page<User> findAllByLoginNot(Pageable pageable, String login);
+    public Optional<User> findOneByLogin(@Param("login") String login) {
+        return  this.mapper.findOneByLogin(login);
+    }
+
+//    List<User> findAuthorities(
+//        @Param("id")String id, @Param("login")String login ,@Param("email")String email);
+
+    public Optional<User> findOneWithAuthoritiesById(@Param("id") Long id) {
+        return this.mapper.findOneWithAuthoritiesById(id);
+    }
+
+    public Optional<User> findOneWithAuthoritiesByLogin(@Param("login") String login) {
+        return this.mapper.findOneWithAuthoritiesByLogin(login);
+    }
+
+    public Optional<User> findOneWithAuthoritiesByEmail(@Param("email") String email) {
+        return this.findOneWithAuthoritiesByEmail(email);
+    }
+
+    public Page<User> findAllByLoginNot(Pageable pageable, String login) {
+
+        return new PageImpl<User>(
+            this.mapper.findAllByLoginNot(pageable, login),
+            pageable,
+            this.mapper.countAllByLoginNot(login));
+    }
 }

@@ -106,6 +106,10 @@
             <column name="event_date" type="timestamp"/>
             <column name="event_type" type="varchar(255)"/>
         </createTable>
+        <loadData
+            file="config/liquibase/data/jhi_persistent_audit_evt.csv"
+            separator=";"
+            tableName="jhi_persistent_audit_event"/>
 
         <createTable tableName="jhi_persistent_audit_evt_data">
             <column name="event_id" type="bigint">
@@ -136,6 +140,10 @@
                                  constraintName="fk_evt_pers_audit_evt_data"
                                  referencedColumnNames="event_id"
                                  referencedTableName="jhi_persistent_audit_event"/>
+        <loadData
+            file="config/liquibase/data/jhi_persistent_audit_evt_data.csv"
+            separator=";"
+            tableName="jhi_persistent_audit_evt_data"/>
     </changeSet>
 
     <changeSet author="jhipster" id="00000000000002" context="test">

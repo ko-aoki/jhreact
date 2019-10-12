@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.domain.mapper.UserDomainMapper">
+    <resultMap id="user" type="User">
+        <id property="id" column="id"/>
+        <id property="login" column="login"/>
+        <id property="password" column="password_hash"/>
+        <id property="firstName" column="first_name"/>
+        <id property="lastName" column="last_name"/>
+        <id property="email" column="email"/>
+        <id property="activated" column="activated"/>
+        <id property="langKey" column="lang_key"/>
+        <id property="imageUrl" column="image_url"/>
+        <id property="activationKey" column="activation_key"/>
+        <id property="resetKey" column="reset_key"/>
+        <id property="resetDate" column="reset_date"/>
+        <id property="createdBy" column="created_by"/>
+        <id property="createdDate" column="created_date"/>
+        <id property="lastModifiedBy" column="last_modified_by"/>
+        <id property="lastModifiedDate" column="last_modified_date"/>
+        <collection property="authorities" ofType="Authority">
+            <id property="name" column="authority_name"/>
+        </collection>
+    </resultMap>
+    <select id="findById" resultMap="user">
+        select
+        id,
+        login,
+        password_hash,
+        first_name,
+        last_name,
+        email,
+        activated,
+        lang_key,
+        image_url,
+        activation_key,
+        reset_key,
+        reset_date,
+        created_by,
+        created_date,
+        last_modified_by,
+        last_modified_date
+        from jhi_user
+        where
+            id = #{id}
+    </select>
+    <select id="findAll" resultMap="user">
+      select
+          id,
+          login,
+          password_hash,
+          first_name,
+          last_name,
+          email,
+          activated,
+          lang_key,
+          image_url,
+          activation_key,
+          reset_key,
+          reset_date,
+          created_by,
+          created_date,
+          last_modified_by,
+          last_modified_date
+      from jhi_user
+      order by id
+    </select>
+    <insert id="create" parameterType="user">
+          insert into
+              jhi_user
+          (
+            id,
+            login,
+            password_hash,
+            first_name,
+            last_name,
+            email,
+            activated,
+            lang_key,
+            image_url,
+            activation_key,
+            reset_key,
+            reset_date,
+            created_by,
+            created_date,
+            last_modified_by,
+            last_modified_date
+          )
+          values
+          (
+            #{id},
+            #{login},
+            #{password_hash},
+            #{first_name},
+            #{last_name},
+            #{email},
+            #{activated},
+            #{lang_key},
+            #{image_url},
+            #{activation_key},
+            #{reset_key},
+            #{reset_date},
+            #{created_by},
+            #{created_date},
+            #{last_modified_by},
+            #{last_modified_date}
+          )
+      </insert>
+    <delete id="delete" parameterType="user">
+        delete
+        from
+        jhi_user
+        where
+        id = #{id}
+    </delete>
+    <select id="findOneByActivationKey" resultMap="user">
+        select
+        id,
+        login,
+        password_hash,
+        first_name,
+        last_name,
+        email,
+        activated,
+        lang_key,
+        image_url,
+        activation_key,
+        reset_key,
+        reset_date,
+        created_by,
+        created_date,
+        last_modified_by,
+        last_modified_date
+        from jhi_user
+        <where>
+            id = #{id}
+            <if test="activationKey != null and activationKey != ''">
+                and
+                activation_key = #{activationKey}
+            </if>
+        </where>
+    </select>
+    <select id="findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore" resultMap="user">
+      select
+          id,
+          login,
+          password_hash,
+          first_name,
+          last_name,
+          email,
+          activated,
+          lang_key,
+          image_url,
+          activation_key,
+          reset_key,
+          reset_date,
+          created_by,
+          created_date,
+          last_modified_by,
+          last_modified_date
+      from jhi_user
+      where
+        activated = false
+        and
+        activation_key is not null
+        and
+    <![CDATA[
+        created_date < #{createdDate}
+    ]]>
+      order by id
+    </select>
+    <select id="findOneByResetKey" resultMap="user">
+        select
+        id,
+        login,
+        password_hash,
+        first_name,
+        last_name,
+        email,
+        activated,
+        lang_key,
+        image_url,
+        activation_key,
+        reset_key,
+        reset_date,
+        created_by,
+        created_date,
+        last_modified_by,
+        last_modified_date
+        from jhi_user
+        where
+            reset_key = #{resetKey}
+    </select>
+    <select id="findOneByEmailIgnoreCase" resultMap="user">
+        select
+        id,
+        login,
+        password_hash,
+        first_name,
+        last_name,
+        email,
+        activated,
+        lang_key,
+        image_url,
+        activation_key,
+        reset_key,
+        reset_date,
+        created_by,
+        created_date,
+        last_modified_by,
+        last_modified_date
+        from jhi_user
+        where
+            upper(email) = upper(#{email})
+    </select>
+    <select id="findOneByLogin" resultMap="user">
+        select
+        id,
+        login,
+        password_hash,
+        first_name,
+        last_name,
+        email,
+        activated,
+        lang_key,
+        image_url,
+        activation_key,
+        reset_key,
+        reset_date,
+        created_by,
+        created_date,
+        last_modified_by,
+        last_modified_date
+        from jhi_user
+        where
+            login = #{login}
+    </select>
+    <select id="findOneWithAuthoritiesById" resultMap="user">
+        select
+        u.id as id,
+        u.login as login,
+        u.password_hash as password_hash,
+        u.first_name as first_name,
+        u.last_name as last_name,
+        u.email as email,
+        u.activated as activated,
+        u.lang_key as lang_key,
+        u.image_url as image_url,
+        u.activation_key as activation_key,
+        u.reset_key as reset_key,
+        u.reset_date as reset_date,
+        u.created_by as created_by,
+        u.created_date as created_date,
+        u.last_modified_by as last_modified_by,
+        u.last_modified_date as last_modified_date,
+        a.name as authority_name
+        from jhi_user u
+        inner join
+        jhi_user_authority ua
+        on
+        u.id = ua.user_id
+        inner join
+        jhi_authority a
+        on
+        ua.authority_name = a.name
+        where
+            u.id = #{id}
+    </select>
+    <select id="findOneWithAuthoritiesByLogin" resultMap="user">
+        select
+        u.id as id,
+        u.login as login,
+        u.password_hash as password_hash,
+        u.first_name as first_name,
+        u.last_name as last_name,
+        u.email as email,
+        u.activated as activated,
+        u.lang_key as lang_key,
+        u.image_url as image_url,
+        u.activation_key as activation_key,
+        u.reset_key as reset_key,
+        u.reset_date as reset_date,
+        u.created_by as created_by,
+        u.created_date as created_date,
+        u.last_modified_by as last_modified_by,
+        u.last_modified_date as last_modified_date,
+        a.name as authority_name
+        from jhi_user u
+        inner join
+        jhi_user_authority ua
+        on
+        u.id = ua.user_id
+        inner join
+        jhi_authority a
+        on
+        ua.authority_name = a.name
+        where
+            login = #{login}
+    </select>
+    <select id="findOneWithAuthoritiesByEmail" resultMap="user">
+        select
+        u.id as id,
+        u.login as login,
+        u.password_hash as password_hash,
+        u.first_name as first_name,
+        u.last_name as last_name,
+        u.email as email,
+        u.activated as activated,
+        u.lang_key as lang_key,
+        u.image_url as image_url,
+        u.activation_key as activation_key,
+        u.reset_key as reset_key,
+        u.reset_date as reset_date,
+        u.created_by as created_by,
+        u.created_date as created_date,
+        u.last_modified_by as last_modified_by,
+        u.last_modified_date as last_modified_date,
+        a.name as authority_name
+        from jhi_user u
+        inner join
+        jhi_user_authority ua
+        on
+        u.id = ua.user_id
+        inner join
+        jhi_authority a
+        on
+        ua.authority_name = a.name
+        where
+            email = #{email}
+    </select>
+    <select id="countAllByLoginNot" resultType="_int">
+      select
+        count(*)
+      from jhi_user
+      where
+          login != #{login}
+    </select>
+    <select id="findAllByLoginNot" resultMap="user">
+      select
+          id,
+          login,
+          password_hash,
+          first_name,
+          last_name,
+          email,
+          activated,
+          lang_key,
+          image_url,
+          activation_key,
+          reset_key,
+          reset_date,
+          created_by,
+          created_date,
+          last_modified_by,
+          last_modified_date
+      from jhi_user
+      where
+          login != #{login}
+      order by id
+      LIMIT
+        #{pageable.pageSize}
+      OFFSET
+        #{pageable.offset}
+    </select>
+    <!--
+        <select id="findAuthorities" resultMap="user">
+            select
+            authority_name,
+            from jhi_user_authority u
+            INNER JOIN
+            jhi_authority a
+            ON
+            u.authority_name = a.name
+            <where>
+            user_id = #{id}
+                <if test="login != null and login != ''">
+                    and
+                    n.login = #{login}
+                </if>
+                <if test="email != null and email != ''">
+                    and
+                    n.email = #{email}
+                </if>
+            </where>
+            LIMIT
+            #{pageable.pageSize}
+            OFFSET
+            #{pageable.offset}
+        </select>
+    -->
+</mapper>

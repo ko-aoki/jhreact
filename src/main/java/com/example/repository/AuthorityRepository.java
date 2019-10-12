@@ -1,11 +1,27 @@
 package com.example.repository;
 
 import com.example.domain.Authority;
+import com.example.domain.mapper.AuthorityDomainMapper;
+import org.springframework.stereotype.Repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+import java.util.Optional;
 
-/**
- * Spring Data JPA repository for the {@link Authority} entity.
- */
-public interface AuthorityRepository extends JpaRepository<Authority, String> {
+@Repository
+public class AuthorityRepository {
+
+    AuthorityDomainMapper mapper;
+
+
+    public AuthorityRepository(AuthorityDomainMapper mapper) {
+        this.mapper = mapper;
+    }
+
+    public Optional<Authority> findById(String name) {
+        return this.mapper.findById(name);
+    }
+
+    public List<Authority> findAll() {
+        return this.mapper.findAll();
+    }
 }

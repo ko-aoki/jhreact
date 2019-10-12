@@ -9,8 +9,9 @@ import com.example.security.AuthoritiesConstants;
 import com.example.security.SecurityUtils;
 import com.example.service.dto.UserDTO;
 import com.example.service.util.RandomUtil;
-import com.example.web.rest.errors.*;
-
+import com.example.web.rest.errors.EmailAlreadyUsedException;
+import com.example.web.rest.errors.InvalidPasswordException;
+import com.example.web.rest.errors.LoginAlreadyUsedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -22,7 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -115,12 +119,11 @@ public class UserService {
         return newUser;
     }
 
-    private boolean removeNonActivatedUser(User existingUser){
+    private boolean removeNonActivatedUser(User existingUser) {
         if (existingUser.getActivated()) {
-             return false;
+            return false;
         }
         userRepository.delete(existingUser);
-        userRepository.flush();
         return true;
     }
 
@@ -266,6 +269,7 @@ public class UserService {
 
     /**
      * Gets a list of all the authorities.
+     *
      * @return a list of all the authorities.
      */
     public List<String> getAuthorities() {

@@ -193,7 +193,7 @@ public class UserResourceIT {
     @Transactional
     public void createUserWithExistingLogin() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
+        userRepository.save(user);
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
@@ -222,7 +222,7 @@ public class UserResourceIT {
     @Transactional
     public void createUserWithExistingEmail() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
+        userRepository.save(user);
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
@@ -251,7 +251,7 @@ public class UserResourceIT {
     @Transactional
     public void getAllUsers() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
+        userRepository.save(user);
 
         // Get all the users
         restUserMockMvc.perform(get("/api/users?sort=id,desc")
@@ -270,7 +270,7 @@ public class UserResourceIT {
     @Transactional
     public void getUser() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
+        userRepository.save(user);
 
         // Get the user
         restUserMockMvc.perform(get("/api/users/{login}", user.getLogin()))
@@ -296,7 +296,7 @@ public class UserResourceIT {
     @Transactional
     public void updateUser() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
+        userRepository.save(user);
         int databaseSizeBeforeUpdate = userRepository.findAll().size();
 
         // Update the user
@@ -338,7 +338,7 @@ public class UserResourceIT {
     @Transactional
     public void updateUserLogin() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
+        userRepository.save(user);
         int databaseSizeBeforeUpdate = userRepository.findAll().size();
 
         // Update the user
@@ -381,7 +381,7 @@ public class UserResourceIT {
     @Transactional
     public void updateUserExistingEmail() throws Exception {
         // Initialize the database with 2 users
-        userRepository.saveAndFlush(user);
+        userRepository.save(user);
 
         User anotherUser = new User();
         anotherUser.setLogin("jhipster");
@@ -392,7 +392,7 @@ public class UserResourceIT {
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
         anotherUser.setLangKey("en");
-        userRepository.saveAndFlush(anotherUser);
+        userRepository.save(anotherUser);
 
         // Update the user
         User updatedUser = userRepository.findById(user.getId()).get();
@@ -423,7 +423,7 @@ public class UserResourceIT {
     @Transactional
     public void updateUserExistingLogin() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
+        userRepository.save(user);
 
         User anotherUser = new User();
         anotherUser.setLogin("jhipster");
@@ -434,7 +434,7 @@ public class UserResourceIT {
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
         anotherUser.setLangKey("en");
-        userRepository.saveAndFlush(anotherUser);
+        userRepository.save(anotherUser);
 
         // Update the user
         User updatedUser = userRepository.findById(user.getId()).get();
@@ -465,7 +465,7 @@ public class UserResourceIT {
     @Transactional
     public void deleteUser() throws Exception {
         // Initialize the database
-        userRepository.saveAndFlush(user);
+        userRepository.save(user);
         int databaseSizeBeforeDelete = userRepository.findAll().size();
 
         // Delete the user
