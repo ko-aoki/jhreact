@@ -2,6 +2,7 @@ package com.example.domain.mapper;
 
 import com.example.domain.FlatPersistentAuditEvent;
 import com.example.domain.PersistentAuditEvent;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
 
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * 監査イベントテーブルのMapperインターフェース.
  */
+@Mapper
 public interface PersistenceAuditEventDomainMapper {
 
     List<FlatPersistentAuditEvent> findById(@Param("id") Long id);

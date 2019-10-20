@@ -44,6 +44,7 @@ public class PersistenceAuditEventRepository {
         Map<String, String> eventDataMap = flatPersistentAuditEventList.stream().collect(
             Collectors.toMap(FlatPersistentAuditEvent::getAuthorityName, FlatPersistentAuditEvent::getAuthorityValue)
         );
+
         return  flatPersistentAuditEventList.stream().findFirst().map(
             d -> {
                 PersistentAuditEvent p = new PersistentAuditEvent();

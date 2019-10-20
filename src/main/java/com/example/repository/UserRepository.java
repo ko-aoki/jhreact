@@ -74,7 +74,7 @@ public class UserRepository {
     }
 
     public Optional<User> findOneWithAuthoritiesByEmail(@Param("email") String email) {
-        return this.findOneWithAuthoritiesByEmail(email);
+        return this.mapper.findOneWithAuthoritiesByEmail(email);
     }
 
     public Page<User> findAllByLoginNot(Pageable pageable, String login) {

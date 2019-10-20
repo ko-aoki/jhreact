@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 
@@ -35,6 +36,8 @@ class PersistentAuditEventRepositoryTest {
         PersistentAuditEvent eve = eveOpt.get();
 
         assertThat(eve.getEventId(), is(1l));
+        assertThat(eve.getData().get("key1"), is("value1"));
+        assertThat(eve.getData().get("key1_1"), is("value1_1"));
 
         eveOpt = repo.findById(10L);
 

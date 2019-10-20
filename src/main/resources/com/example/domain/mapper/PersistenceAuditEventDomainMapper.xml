@@ -3,7 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.domain.mapper.PersistenceAuditEventDomainMapper">
-    <resultMap id="flatPersistentAuditEvent" type="FlatPersistentAuditEvent">
+    <resultMap id="flatPersistentAuditEvent" type="com.example.domain.FlatPersistentAuditEvent">
         <id property="id" column="event_id"/>
         <id property="principal" column="principal"/>
         <id property="auditEventDate" column="event_date"/>
@@ -11,14 +11,14 @@
         <id property="authorityName" column="authority_name"/>
         <id property="authorityValue" column="authority_value"/>
     </resultMap>
-    <resultMap id="persistentAuditEvent" type="PersistentAuditEvent">
+    <resultMap id="persistentAuditEvent" type="com.example.domain.PersistentAuditEvent">
         <id property="eventId" column="event_id"/>
         <id property="principal" column="principal"/>
         <id property="auditEventDate" column="event_date"/>
         <id property="auditEventType" column="event_type"/>
         <collection property="keyValueList" column="event_id" ofType="KeyValue" select="findAuditEventDataById"/>
     </resultMap>
-    <resultMap id="keyValue" type="KeyValue">
+    <resultMap id="keyValue" type="com.example.domain.KeyValue">
         <id property="key" column="key"/>
         <id property="value" column="value"/>
     </resultMap>
@@ -93,7 +93,7 @@
             #{auditEventType}
           )
     </insert>
-    <delete id="delete" parameterType="PersistentAuditEvent">
+    <delete id="delete" parameterType="com.example.domain.PersistentAuditEvent">
         delete
         from
         jhi_persistent_audit_event

@@ -3,7 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.domain.mapper.PersistenceAuditEventDataDomainMapper">
-    <insert id="save" parameterType="PersistentAuditEventData">
+    <insert id="save" parameterType="com.example.domain.PersistentAuditEventData">
           insert into
               jhi_persistent_audit_evt_data
           (
@@ -18,7 +18,7 @@
             #{value}
           )
     </insert>
-    <delete id="delete" parameterType="PersistentAuditEventData">
+    <delete id="delete" parameterType="com.example.domain.PersistentAuditEventData">
         delete
         from
         jhi_persistent_audit_evt_data

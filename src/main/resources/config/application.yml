@@ -150,3 +150,8 @@ jhipster:
 # ===================================================================
 
 # application:
+mybatis:
+  configuration:
+    default-fetch-size: 100
+    jdbc-type-for-null: Null
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

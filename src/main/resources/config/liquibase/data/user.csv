@@ -4,4 +4,4 @@ id;login;password_hash;first_name;last_name;email;image_url;activated;lang_key;c
 3;admin;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;admin@localhost;;true;en;system;system;;2020-01-01T00:00:00;
 4;user;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;User;User;user@localhost;;true;en;system;system;;2020-01-01T00:00:00;
 5;user1;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;User;User;user1@localhost;;false;en;system;system;activationkey;2019-12-31T00:00:00;reset
-6;anonymous;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;;;;;false;en;system;system;activationkey;2019-12-31T00:00:00;reset
+6;anonymous;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;;;;;false;en;system;system;;2020-01-01T00:00:00;reset1

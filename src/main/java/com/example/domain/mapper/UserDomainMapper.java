@@ -1,6 +1,7 @@
 package com.example.domain.mapper;
 
 import com.example.domain.User;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
 /**
  * ユーザマスタのMapperインターフェース.
  */
+@Mapper
 public interface UserDomainMapper {
 
     Optional<User> findById(@Param("id") Long id);

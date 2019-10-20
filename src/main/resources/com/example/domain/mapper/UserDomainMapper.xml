@@ -3,7 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.domain.mapper.UserDomainMapper">
-    <resultMap id="user" type="User">
+    <resultMap id="user" type="com.example.domain.User">
         <id property="id" column="id"/>
         <id property="login" column="login"/>
         <id property="password" column="password_hash"/>
@@ -20,7 +20,7 @@
         <id property="createdDate" column="created_date"/>
         <id property="lastModifiedBy" column="last_modified_by"/>
         <id property="lastModifiedDate" column="last_modified_date"/>
-        <collection property="authorities" ofType="Authority">
+        <collection property="authorities" ofType="com.example.domain.Authority">
             <id property="name" column="authority_name"/>
         </collection>
     </resultMap>
@@ -67,7 +67,7 @@
       from jhi_user
       order by id
     </select>
-    <insert id="create" parameterType="user">
+    <insert id="create" parameterType="com.example.domain.User">
           insert into
               jhi_user
           (
@@ -108,7 +108,7 @@
             #{last_modified_date}
           )
       </insert>
-    <delete id="delete" parameterType="user">
+    <delete id="delete" parameterType="com.example.domain.User">
         delete
         from
         jhi_user
@@ -135,9 +135,7 @@
         last_modified_date
         from jhi_user
         <where>
-            id = #{id}
             <if test="activationKey != null and activationKey != ''">
-                and
                 activation_key = #{activationKey}
             </if>
         </where>
