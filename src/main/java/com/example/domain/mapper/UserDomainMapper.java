@@ -19,9 +19,11 @@ public interface UserDomainMapper {
 
     List<User> findAll();
 
-    void save(@Param("user") User user);
+    void create(User user);
 
-    void delete(@Param("user") User user);
+    void update(User user);
+
+    void delete(User user);
 
     Optional<User> findOneByActivationKey(@Param("activationKey") String activationKey);
 

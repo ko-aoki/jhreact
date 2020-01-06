@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -127,7 +128,8 @@ public class UserService {
         return true;
     }
 
-    public User createUser(UserDTO userDTO) {
+    public User createUser(UserDTO userDTO, UserDetails loginInfo) {
+
         User user = new User();
         user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
@@ -142,7 +144,8 @@ public class UserService {
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
-        user.setResetDate(Instant.now());
+        Instant now = Instant.now();
+        user.setResetDate(now);
         user.setActivated(true);
         if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities = userDTO.getAuthorities().stream()
@@ -152,6 +155,11 @@ public class UserService {
                 .collect(Collectors.toSet());
             user.setAuthorities(authorities);
         }
+        // TODO ログイン情報のMapperとか
+        user.setCreatedBy(loginInfo.getUsername());
+        user.setCreatedDate(now);
+        user.setLastModifiedBy(loginInfo.getUsername());
+        user.setLastModifiedDate(now);
         userRepository.save(user);
         log.debug("Created Information for User: {}", user);
         return user;
@@ -206,6 +214,7 @@ public class UserService {
                     .map(Optional::get)
                     .forEach(managedAuthorities::add);
                 log.debug("Changed Information for User: {}", user);
+                this.userRepository.update(user);
                 return user;
             })
             .map(UserDTO::new);

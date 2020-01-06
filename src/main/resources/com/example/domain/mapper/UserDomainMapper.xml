@@ -67,13 +67,12 @@
       from jhi_user
       order by id
     </select>
-    <insert id="create" parameterType="com.example.domain.User">
+    <insert id="create" parameterType="com.example.domain.User" useGeneratedKeys="true" keyProperty="id">
           insert into
               jhi_user
           (
-            id,
-            login,
             password_hash,
+            login,
             first_name,
             last_name,
             email,
@@ -90,24 +89,44 @@
           )
           values
           (
-            #{id},
+            #{password},
             #{login},
-            #{password_hash},
-            #{first_name},
-            #{last_name},
+            #{firstName},
+            #{lastName},
             #{email},
             #{activated},
-            #{lang_key},
-            #{image_url},
-            #{activation_key},
-            #{reset_key},
-            #{reset_date},
-            #{created_by},
-            #{created_date},
-            #{last_modified_by},
-            #{last_modified_date}
+            #{langKey},
+            #{imageUrl},
+            #{activationKey},
+            #{resetKey},
+            #{resetDate},
+            #{createdBy},
+            #{createdDate},
+            #{lastModifiedBy},
+            #{lastModifiedDate}
           )
       </insert>
+    <update id="update" parameterType="com.example.domain.User">
+          update
+              jhi_user
+          set
+            login = #{login},
+            first_name = #{firstName},
+            last_name = #{lastName},
+            email = #{email},
+            activated = #{activated},
+            lang_key = #{langKey},
+            image_url = #{imageUrl},
+            activation_key = #{activationKey},
+            reset_key = #{resetKey},
+            reset_date = #{resetDate},
+            created_by = #{createdBy},
+            created_date = #{createdDate},
+            last_modified_by = #{lastModifiedBy},
+            last_modified_date = #{lastModifiedDate}
+        where
+            id = #{id}
+      </update>
     <delete id="delete" parameterType="com.example.domain.User">
         delete
         from

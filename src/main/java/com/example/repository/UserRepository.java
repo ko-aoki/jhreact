@@ -32,12 +32,17 @@ public class UserRepository {
         return this.mapper.findAll();
     }
 
-    public User save(@Param("user") User user) {
-        this.mapper.save(user);
+    public User save(User user) {
+        this.mapper.create(user);
         return user;
     }
 
-    public void delete(@Param("user") User user) {
+    public User update(User user) {
+        this.mapper.update(user);
+        return user;
+    }
+
+    public void delete(User user) {
         this.mapper.delete(user);
     }
 

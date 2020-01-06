@@ -32,8 +32,8 @@
     <delete id="delete" parameterType="com.example.domain.Authority">
         delete
         from
-        jhi_authority
+            jhi_authority
         where
-        name = #{name}
+            name = #{name}
     </delete>
 </mapper>
